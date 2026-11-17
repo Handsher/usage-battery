@@ -185,21 +185,19 @@ function scene(u, now, spot, size) {
 }
 
 // ---------- the mod ----------
-let version = 0, timer = null
-async function show($) {
-  // a new scene name each time: the app asks the Backdrop hook to draw it again
-  await $.theme.set({ backdrop: { scene: `usage-battery-${++version}`, glass: false }, overrideColorScheme: 'dark' })
-}
-
+const SCENE = 'usage-battery'
+let timer = null
 export const register = (on, options) => {
   on('session.start', async ($, e, next) => {
-    await show($)
-    timer ??= $.clock.every(60000, () => void show($)) // the reset clock and the figures, once a minute
+    // the theme is set once: a set replaces the whole theme, so setting it again would wipe another mod's colors
+    await $.theme.set({ backdrop: { scene: SCENE, glass: false }, overrideColorScheme: 'dark' })
+    timer ??= $.clock.every(60000, () => $.ui.invalidate('ui.render')) // the reset clock moves each minute
     return next(e)
   })
-  on('turn.complete', async ($, e, next) => { const r = await next(e); await show($); return r })
+  // the figures moved (after each answer, or a window moved a point): draw the battery again
+  on('session.measure', ($, e, next) => { $.ui.invalidate('ui.render'); return next(e) })
   on('ui.render', { component: 'Backdrop' }, async ($, e, next) => {
-    if (e.props.plugin !== $.plugin.name || !String(e.props.scene).startsWith('usage-battery-')) return next(e)
+    if (e.props.plugin !== $.plugin.name || e.props.scene !== SCENE) return next(e)
     if (e.surface !== 'desktop' && e.surface !== 'mobile') return next(e)
     let u = null
     try { u = await $.session.usage() } catch {} // no figures yet: the ground alone
