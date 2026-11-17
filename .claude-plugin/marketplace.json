@@ -1,0 +1,13 @@
+{
+  "name": "usage-battery",
+  "owner": {
+    "name": "Handsher"
+  },
+  "plugins": [
+    {
+      "name": "usage-battery",
+      "source": "./"
+    }
+  ],
+  "description": "Usage battery: Clawd and a pixel battery of your weekly Claude usage on the Desktop background"
+}

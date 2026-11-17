@@ -1,0 +1,35 @@
+{
+  "name": "usage-battery",
+  "version": "1.0.0",
+  "description": "Clawd beside a pixel battery of your weekly Claude usage, animated on the Claude Desktop background",
+  "userConfig": {
+    "position": {
+      "type": "string",
+      "title": "Position",
+      "description": "Where the battery sits on the window",
+      "options": [
+        "top-right",
+        "right",
+        "bottom-right",
+        "top-left",
+        "bottom-left"
+      ],
+      "default": "top-right"
+    },
+    "size": {
+      "type": "string",
+      "title": "Size",
+      "description": "How big the battery card is",
+      "options": [
+        "small",
+        "medium",
+        "large"
+      ],
+      "default": "medium"
+    }
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Handsher"
+  }
+}
